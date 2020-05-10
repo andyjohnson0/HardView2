@@ -1,7 +1,6 @@
 # HardView2
 
 HardView2 is a simple, low-distraction image viewer. I use it to sort pictures before adding them to Lightroom.
-It supports jpeg format pictures only, and the file extension must be `.jpg` or `.jpeg`.
 
 The name comes from an old Delph-based image viewer called hardview, by Tony Mills. I used it for many years
 before a Windows upgrade finally stopped it working.
@@ -14,8 +13,12 @@ page, or clone the repo and build it yourself.
 
 2. Add `hv.exe` to your path
 
-3. Run `hv`. By default it will islay the contents of your My Pictures folder. The program is mostly keyboard
-driven:
+3. Run `hv`. By default it will display the contents of your My Pictures folder.
+It supports jpeg format pictures only, and the file extension must be `.jpg` or `.jpeg`.
+
+## Using HardView2
+
+The program is mostly keyboard driven:
 
 * Scroll through the pictures using the left and right arrow buttons. Press the down arrow button to select a
 sub-directory. Press the up arrow button to move to the parent directory.
