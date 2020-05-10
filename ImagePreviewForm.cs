@@ -195,15 +195,13 @@ namespace uk.andyjohnson.HardView2
                     }
                     break;
                 case Keys.F:
+                    var dlg = new FolderBrowserDialog();
                     if (currentFile != null)
-                    {
-                        var dlg = new FolderBrowserDialog();
                         dlg.SelectedPath = currentFile.Directory.FullName;
-                        if (dlg.ShowDialog(this) == DialogResult.OK)
-                        {
-                            SetCurrent(dlg.SelectedPath);
-                            DoRedraw();
-                        }
+                    if (dlg.ShowDialog(this) == DialogResult.OK)
+                    {
+                        SetCurrent(dlg.SelectedPath);
+                        DoRedraw();
                     }
                     break;
                 case Keys.F11:
