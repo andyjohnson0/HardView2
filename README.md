@@ -20,35 +20,37 @@ It supports jpeg format pictures only, and the file extension must be `.jpg` or 
 
 The program is mostly keyboard driven:
 
-* Scroll through the pictures using the left and right arrow buttons. Press the down arrow button to select a
-sub-directory. Press the up arrow button to move to the parent directory.
+* Scroll through the pictures using the *left* and *right* arrow buttons. Press the *down* arrow button to select a
+sub-directory. Press the *up* arrow button to move to the parent directory.
 
-* Press Return to move to a random picture. Home and End move to the first and last pictures respectively.
+* Press *Return* to move to a random picture. *Home* and *End* move to the first and last pictures respectively.
 
-* Space moves the current picture to a sub-directory named `temp`. This is useful for sorting pictures into
+* *Space* moves the current picture to a sub-directory named `temp`. This is useful for sorting pictures into
 keep vs not keep as part of a simple photographic workflow (e.g before adding to Lightroom or similar).
 
-* F shows a directory browse dialog to move to a new directory.
+* *F* shows a directory browse dialog to move to a new directory.
 
-* Delete moves the current photo to the Windows recycle bin.
+* *Delete* moves the current photo to the Windows recycle bin.
 
-* I toggles displaying picture information.
+* *I* toggles displaying picture information.
 
-* S toggles scaling pictures to fit the screen.
+* *S* toggles scaling pictures to fit the screen.
 
-* R resets scaling and zooming.
+* *R* resets scaling and zooming.
 
-* Escape exits the program.
+* *Escape* exits the program.
 
 * Use the mouse wheel to zoom in/out and drag to drag the image.
 
 ## Prerequisites
 
-.net framework 4.5 or later
+.net framework 4.5 or later.
+
+Visual Studio 2019 to build.
 
 ## Author
 
-Andy Johnson - http://andyjohnson.uk
+Andy Johnson | https://github.com/andyjohnson0 | http://andyjohnson.uk
 
 ## Licence
 
