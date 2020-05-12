@@ -237,11 +237,13 @@ namespace uk.andyjohnson.HardView2
         private void ShowSubDirMenu()
         {
             var menu = new ContextMenuStrip();
+            menu.Items.Add(new ToolStripLabel("Select Sub-Directory"));
+            menu.Items.Add(new ToolStripSeparator());
             foreach (var subDir in currentDirectory.EnumerateDirectories())
             {
                 menu.Items.Add(subDir.Name);
             }
-            if (menu.Items.Count > 0)
+            if (menu.Items.Count > 2)
             {
                 menu.ItemClicked += SubDirMenu_ItemClicked;
                 menu.Show(this, this.Width / 2, this.Height / 2);
@@ -252,7 +254,9 @@ namespace uk.andyjohnson.HardView2
         private void ShowDrivesMenu()
         {
             var menu = new ContextMenuStrip();
-            foreach(var drive in DriveInfo.GetDrives())
+            menu.Items.Add(new ToolStripLabel("Select Drive"));
+            menu.Items.Add(new ToolStripSeparator());
+            foreach (var drive in DriveInfo.GetDrives())
             {
                 menu.Items.Add(drive.Name);
             }
