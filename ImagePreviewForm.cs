@@ -182,9 +182,13 @@ namespace uk.andyjohnson.HardView2
                                 DoRedraw();
                             }
                             {
-                                DoRedraw("No pictures found");
+                                DoRedraw(currentDirectory.FullName + " - No pictures found");
                                 ShowSubDirMenu();
                             }
+                        }
+                        else
+                        {
+                            ShowDrivesMenu();
                         }
                     }
                     break;
@@ -233,7 +237,6 @@ namespace uk.andyjohnson.HardView2
         private void ShowSubDirMenu()
         {
             var menu = new ContextMenuStrip();
-            menu.Text = "Foo";
             foreach (var subDir in currentDirectory.EnumerateDirectories())
             {
                 menu.Items.Add(subDir.Name);
@@ -243,6 +246,18 @@ namespace uk.andyjohnson.HardView2
                 menu.ItemClicked += SubDirMenu_ItemClicked;
                 menu.Show(this, this.Width / 2, this.Height / 2);
             }
+        }
+
+
+        private void ShowDrivesMenu()
+        {
+            var menu = new ContextMenuStrip();
+            foreach(var drive in DriveInfo.GetDrives())
+            {
+                menu.Items.Add(drive.Name);
+            }
+            menu.ItemClicked += SubDirMenu_ItemClicked;
+            menu.Show(this, this.Width / 2, this.Height / 2);
         }
 
 
@@ -297,6 +312,7 @@ namespace uk.andyjohnson.HardView2
             else
             {
                 e.Graphics.Clear(this.BackColor);
+                currentMessage = currentDirectory.FullName + " - No pictures found";
             }
 
             if (!string.IsNullOrEmpty(currentMessage))
@@ -361,7 +377,7 @@ namespace uk.andyjohnson.HardView2
         {
             var msgSize = g.MeasureString(message, toastFont);
             var msgX = (this.Width - (int)msgSize.Width) / 2;
-            var msgY = this.Height - (3 * (int)msgSize.Height);
+            var msgY = 3 * (int)msgSize.Height;
 
             g.FillRectangle(Brushes.Black,
                             msgX - (int)msgSize.Height, msgY - (int)msgSize.Height,
