@@ -45,11 +45,13 @@ namespace uk.andyjohnson.HardView2
 
 
         private void ImagePreviewForm_Load(object sender, EventArgs e)
-        { 
-            //this.TopMost = true;
+        {
+            this.BackColor = Color.Black;
+
+            // Enter full-screen mode
+            this.WindowState = FormWindowState.Normal;
             this.FormBorderStyle = FormBorderStyle.None;
             this.WindowState = FormWindowState.Maximized;
-            this.BackColor = Color.Black;
 
             DoRedraw();
         }
@@ -208,15 +210,6 @@ namespace uk.andyjohnson.HardView2
                         DoRedraw();
                     }
                     break;
-                case Keys.F11:
-                    //if (!this.TopMost)
-                    //{
-                    //    System.Drawing.Rectangle rect = Screen.GetWorkingArea(this);
-                    //    this.MaximizedBounds = Screen.GetWorkingArea(this);
-                    //    this.WindowState = FormWindowState.Maximized;
-                    //}
-                    //DoRedraw();
-                    //break;
                 default:
                     e.Handled = false;
                     return;
@@ -241,7 +234,8 @@ namespace uk.andyjohnson.HardView2
             menu.Items.Add(new ToolStripSeparator());
             foreach (var subDir in currentDirectory.EnumerateDirectories())
             {
-                menu.Items.Add(subDir.Name);
+                if ((subDir.Attributes & FileAttributes.System) == 0)
+                    menu.Items.Add(subDir.Name);
             }
             if (menu.Items.Count > 2)
             {
