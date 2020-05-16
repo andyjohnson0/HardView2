@@ -513,7 +513,8 @@ namespace uk.andyjohnson.HardView2
         private static FileInfo[] GetFiles(DirectoryInfo di)
         {
             var files = di.GetFiles("*.*", SearchOption.TopDirectoryOnly)
-                                    .Where(s => s.FullName.EndsWith(".jpg") || s.FullName.EndsWith(".jpeg") || s.FullName.EndsWith(".png"));
+                                    .Where(s => s.FullName.EndsWith(".jpg") || s.FullName.EndsWith(".jpeg") || s.FullName.EndsWith(".png"))
+                                    .OrderBy(s => s.Name);
             return files.ToArray();
         }
 
