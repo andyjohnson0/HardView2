@@ -70,17 +70,33 @@ namespace uk.andyjohnson.HardView2
                 case Keys.Right:
                     if (currentFile != null)
                     {
-                        SetCurrent(GetNextFile(currentFile, +1));
-                        ResetSizeAndZoom();
-                        DoRedraw();
+                        if (!e.Shift)
+                        {
+                            SetCurrent(GetNextFile(currentFile, +1));
+                            ResetSizeAndZoom();
+                            DoRedraw();
+                        }
+                        else
+                        {
+                            currentDrag.Width += 50;
+                            DoRedraw();
+                        }
                     }
                     break;
                 case Keys.Left:
                     if (currentFile != null)
                     {
-                        SetCurrent(GetNextFile(currentFile, -1));
-                        ResetSizeAndZoom();
-                        DoRedraw();
+                        if (!e.Shift)
+                        {
+                            SetCurrent(GetNextFile(currentFile, -1));
+                            ResetSizeAndZoom();
+                            DoRedraw();
+                        }
+                        else
+                        {
+                            currentDrag.Width -= 50;
+                            DoRedraw();
+                        }
                     }
                     break;
                 case Keys.Return:
@@ -173,31 +189,47 @@ namespace uk.andyjohnson.HardView2
                     DoRedraw();
                     break;
                 case Keys.Up:
-                    if (currentDirectory != null)
+                    if (!e.Shift)
                     {
-                        if (currentDirectory.Parent != null)
+                        if (currentDirectory != null)
                         {
-                            ResetSizeAndZoom();
-                            SetCurrent(currentDirectory.Parent);
-                            if (GetFiles(currentDirectory).Length > 0)
+                            if (currentDirectory.Parent != null)
                             {
-                                DoRedraw();
+                                ResetSizeAndZoom();
+                                SetCurrent(currentDirectory.Parent);
+                                if (GetFiles(currentDirectory).Length > 0)
+                                {
+                                    DoRedraw();
+                                }
+                                {
+                                    DoRedraw(currentDirectory.FullName + " - No pictures found");
+                                    ShowSubDirMenu();
+                                }
                             }
+                            else
                             {
-                                DoRedraw(currentDirectory.FullName + " - No pictures found");
-                                ShowSubDirMenu();
+                                ShowDrivesMenu();
                             }
                         }
-                        else
-                        {
-                            ShowDrivesMenu();
-                        }
+                    }
+                    else if (currentFile != null)
+                    {
+                        currentDrag.Height -= 50;
+                        DoRedraw();
                     }
                     break;
                 case Keys.Down:
-                    if (currentDirectory != null)
+                    if (!e.Shift)
                     {
-                        ShowSubDirMenu();
+                        if (currentDirectory != null)
+                        {
+                            ShowSubDirMenu();
+                        }
+                    }
+                    else if (currentFile != null)
+                    {
+                        currentDrag.Height += 50;
+                        DoRedraw();
                     }
                     break;
                 case Keys.PageUp:

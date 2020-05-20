@@ -39,9 +39,9 @@ keep vs not keep as part of a simple photographic workflow (e.g before adding to
 
 * **S** toggles scaling pictures to fit the screen.
 
-* **PgDn** zooms in.
+* **PgDn** zooms in and **PgUp** zooms out.
 
-* **PgUp** zooms out.
+* **Shift** plus **Up**/**Down**/**Left**/**Right** pans the image (useful when zooming).
 
 * **R** resets scaling and zooming.
 
