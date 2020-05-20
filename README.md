@@ -14,7 +14,8 @@ page, or clone the repo and build it yourself.
 2. Add `hv.exe` to your path
 
 3. Run `hv`. By default it will display the contents of your My Pictures folder.
-It supports jpeg format pictures only, and the file extension must be `.jpg` or `.jpeg`.
+It supports jpeg and png format pictures only, and the file extension must be
+`.jpg` or `.jpeg` or `.png`.
 
 ## Using HardView2
 
@@ -38,11 +39,15 @@ keep vs not keep as part of a simple photographic workflow (e.g before adding to
 
 * **S** toggles scaling pictures to fit the screen.
 
+* **PgDn** zooms in.
+
+* **PgUp** zooms out.
+
 * **R** resets scaling and zooming.
 
 * **Escape** exits the program.
 
-* Use the mouse wheel to zoom in/out and drag to drag the image.
+* You can also use the mouse wheel to zoom in/out, and drag to drag the image.
 
 ## Prerequisites
 

@@ -200,7 +200,23 @@ namespace uk.andyjohnson.HardView2
                         ShowSubDirMenu();
                     }
                     break;
-                case Keys.F:
+                case Keys.PageUp:
+                    if (currentFile != null)
+                    {
+                        // Zoom out
+                        zoom = Math.Max(0, zoom - 50);
+                        DoRedraw();
+                    }
+                    break;
+                 case Keys.PageDown:
+                    if (currentFile != null)
+                    {
+                        // Zoom in
+                        zoom += 50;
+                        DoRedraw();
+                    }
+                    break;
+               case Keys.F:
                     var dlg = new FolderBrowserDialog();
                     if (currentFile != null)
                         dlg.SelectedPath = currentFile.Directory.FullName;
