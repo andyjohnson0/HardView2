@@ -280,7 +280,7 @@ namespace uk.andyjohnson.HardView2
             var menu = new ContextMenuStrip();
             menu.Items.Add(new ToolStripLabel("Select Sub-Directory"));
             menu.Items.Add(new ToolStripSeparator());
-            foreach (var subDir in currentDirectory.EnumerateDirectories())
+            foreach (var subDir in GetDirectories(currentDirectory))
             {
                 if ((subDir.Attributes & FileAttributes.System) == 0)
                     menu.Items.Add(subDir.Name);
@@ -564,6 +564,13 @@ namespace uk.andyjohnson.HardView2
                                     .Where(s => s.FullName.EndsWith(".jpg") || s.FullName.EndsWith(".jpeg") || s.FullName.EndsWith(".png"))
                                     .OrderBy(s => s.Name);
             return files.ToArray();
+        }
+
+
+        private static DirectoryInfo[] GetDirectories(DirectoryInfo di)
+        {
+            var subdirs = di.GetDirectories("*.*").OrderBy(s => s.Name);
+            return subdirs.ToArray();
         }
 
 
