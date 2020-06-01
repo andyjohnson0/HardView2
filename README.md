@@ -45,6 +45,8 @@ keep vs not keep as part of a simple photographic workflow (e.g before adding to
 
 * **R** resets scaling and zooming.
 
+* **M** displays a menu allowing the application to be registered with Windows explorer.
+
 * **Escape** exits the program.
 
 * You can also use the mouse wheel to zoom in/out, and drag to drag the image.

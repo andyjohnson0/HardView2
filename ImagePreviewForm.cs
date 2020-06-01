@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using Microsoft.Win32;
 
 
 namespace uk.andyjohnson.HardView2
@@ -258,6 +259,9 @@ namespace uk.andyjohnson.HardView2
                         DoRedraw();
                     }
                     break;
+                case Keys.M:
+                    ShowApplicationMenu();
+                    break;
                 default:
                     e.Handled = false;
                     return;
@@ -279,6 +283,7 @@ namespace uk.andyjohnson.HardView2
         {
             var menu = new ContextMenuStrip();
             menu.Items.Add(new ToolStripLabel("Select Sub-Directory"));
+            menu.Items[0].Font = new Font(menu.Items[0].Font, FontStyle.Bold);
             menu.Items.Add(new ToolStripSeparator());
             foreach (var subDir in GetDirectories(currentDirectory))
             {
@@ -297,6 +302,7 @@ namespace uk.andyjohnson.HardView2
         {
             var menu = new ContextMenuStrip();
             menu.Items.Add(new ToolStripLabel("Select Drive"));
+            menu.Items[0].Font = new Font(menu.Items[0].Font, FontStyle.Bold);
             menu.Items.Add(new ToolStripSeparator());
             foreach (var drive in DriveInfo.GetDrives())
             {
@@ -317,7 +323,85 @@ namespace uk.andyjohnson.HardView2
             }
         }
 
+
+        private void ShowApplicationMenu()
+        {
+            var menu = new ContextMenuStrip();
+            menu.Items.Add(new ToolStripLabel("HardView2"));
+            menu.Items[0].Font = new Font(menu.Items[0].Font, FontStyle.Bold);
+            menu.Items.Add(new ToolStripSeparator());
+            menu.Items.Add(IsRegistered() ? "Unregister" : "Register").Tag = 0;
+            menu.Items.Add("About").Tag = 1;
+
+            menu.ItemClicked += SubApplicationMenu_ItemClicked;
+            menu.Show(this, this.Width / 2, this.Height / 2);
+        }
+
+
+        private void SubApplicationMenu_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            e.ClickedItem.GetCurrentParent().Hide();
+            switch((int)e.ClickedItem.Tag)
+            {
+                case 0:
+                    ToggleRegistration();
+                    break;
+                case 1:
+                    MessageBox.Show("HardView2 by Andrew Johnson - andyjohnson.uk", "About HardView2",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    break;
+            }
+        }
+
         #endregion Navigation
+
+
+        #region Shell integration
+
+        private const string appRegKey = @"Software\classes\uk.andyjohnson\HardView2";
+        private const string shellRegKey = @"SOFTWARE\Classes\Directory\shell\Open with HardView2";
+
+        private bool IsRegistered()
+        {
+            using (var k = Registry.CurrentUser.OpenSubKey(appRegKey))
+            {
+                return k != null;
+            }
+        }
+
+
+        private void ToggleRegistration()
+        {
+            if (IsRegistered())
+            {
+                Registry.CurrentUser.DeleteSubKeyTree(appRegKey);
+                Registry.CurrentUser.DeleteSubKeyTree(shellRegKey);
+            }
+            else
+            {
+                var exePath = System.Reflection.Assembly.GetEntryAssembly().Location;
+                var cmd = string.Format("\"{0}\" \"%1\"", exePath);
+
+                using (var k = Registry.CurrentUser.CreateSubKey(appRegKey))
+                {
+                    using (var sk = k.CreateSubKey(@"shell\play\command"))
+                    {
+                        sk.SetValue("", cmd);
+                    }
+                }
+                using (var k = Registry.CurrentUser.CreateSubKey(shellRegKey))
+                {
+                    using (var sk = k.CreateSubKey(@"command"))
+                    {
+                        sk.SetValue("", cmd);
+                    }
+                }
+            }
+        }
+
+
+        #endregion Shell integration
+
 
 
 
