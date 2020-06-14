@@ -18,24 +18,18 @@ namespace uk.andyjohnson.HardView2
     {
         public ImagePreviewForm(string fileOrDirPath)
         {
-            this.Text = "HardView2";
+            // Enter full-screen mode
+            this.WindowState = FormWindowState.Normal;
+            this.FormBorderStyle = FormBorderStyle.None;
             this.WindowState = FormWindowState.Maximized;
 
-            var resources = new ComponentResourceManager(typeof(ImagePreviewForm));
-            this.Icon = ((Icon)(resources.GetObject("$this.Icon")));
-
+            // Initial window properties.
+            this.BackColor = Color.Black;
+            this.Text = "HardView2";
             this.Load += this.ImagePreviewForm_Load;
-            this.Paint += this.ImagePreviewForm_Paint;
-            this.KeyDown += this.ImagePreviewForm_KeyDown;
-            this.MouseDown += this.ImagePreviewForm_MouseDown;
-            this.MouseEnter += this.ImagePreviewForm_MouseEnter;
-            this.MouseLeave += this.ImagePreviewForm_MouseLeave;
-            this.MouseMove += this.ImagePreviewForm_MouseMove;
-            this.MouseUp += this.ImagePreviewForm_MouseUp;
-            this.MouseWheel += ImagePreviewForm_MouseWheel;
+            // Other properties are set by Load event handler.
 
-
-
+            //
             SetCurrent(fileOrDirPath);
             if ((currentFile == null) || !currentFile.Exists)
             {
@@ -63,12 +57,17 @@ namespace uk.andyjohnson.HardView2
 
         private void ImagePreviewForm_Load(object sender, EventArgs e)
         {
-            this.BackColor = Color.Black;
+            var resources = new ComponentResourceManager(typeof(ImagePreviewForm));
+            this.Icon = ((Icon)(resources.GetObject("$this.Icon")));
 
-            // Enter full-screen mode
-            this.WindowState = FormWindowState.Normal;
-            this.FormBorderStyle = FormBorderStyle.None;
-            this.WindowState = FormWindowState.Maximized;
+            this.Paint += this.ImagePreviewForm_Paint;
+            this.KeyDown += this.ImagePreviewForm_KeyDown;
+            this.MouseDown += this.ImagePreviewForm_MouseDown;
+            this.MouseEnter += this.ImagePreviewForm_MouseEnter;
+            this.MouseLeave += this.ImagePreviewForm_MouseLeave;
+            this.MouseMove += this.ImagePreviewForm_MouseMove;
+            this.MouseUp += this.ImagePreviewForm_MouseUp;
+            this.MouseWheel += ImagePreviewForm_MouseWheel;
 
             InitCursor();
 
