@@ -18,9 +18,23 @@ namespace uk.andyjohnson.HardView2
     {
         public ImagePreviewForm(string fileOrDirPath)
         {
-            InitializeComponent();
+            this.Text = "HardView2";
+            this.WindowState = FormWindowState.Maximized;
 
+            var resources = new ComponentResourceManager(typeof(ImagePreviewForm));
+            this.Icon = ((Icon)(resources.GetObject("$this.Icon")));
+
+            this.Load += this.ImagePreviewForm_Load;
+            this.Paint += this.ImagePreviewForm_Paint;
+            this.KeyDown += this.ImagePreviewForm_KeyDown;
+            this.MouseDown += this.ImagePreviewForm_MouseDown;
+            this.MouseEnter += this.ImagePreviewForm_MouseEnter;
+            this.MouseLeave += this.ImagePreviewForm_MouseLeave;
+            this.MouseMove += this.ImagePreviewForm_MouseMove;
+            this.MouseUp += this.ImagePreviewForm_MouseUp;
             this.MouseWheel += ImagePreviewForm_MouseWheel;
+
+
 
             SetCurrent(fileOrDirPath);
             if ((currentFile == null) || !currentFile.Exists)
