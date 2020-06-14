@@ -14,9 +14,9 @@ using Microsoft.Win32;
 
 namespace uk.andyjohnson.HardView2
 {
-    public partial class ImagePreviewForm : Form
+    public partial class MainForm : Form
     {
-        public ImagePreviewForm(string fileOrDirPath)
+        public MainForm(string fileOrDirPath)
         {
             // Enter full-screen mode
             this.WindowState = FormWindowState.Normal;
@@ -26,7 +26,7 @@ namespace uk.andyjohnson.HardView2
             // Initial window properties.
             this.BackColor = Color.Black;
             this.Text = "HardView2";
-            this.Load += this.ImagePreviewForm_Load;
+            this.Load += this.MainForm_Load;
             // Other properties are set by Load event handler.
 
             //
@@ -55,19 +55,19 @@ namespace uk.andyjohnson.HardView2
         private Timer cursorTimer;
 
 
-        private void ImagePreviewForm_Load(object sender, EventArgs e)
+        private void MainForm_Load(object sender, EventArgs e)
         {
-            var resources = new ComponentResourceManager(typeof(ImagePreviewForm));
+            var resources = new ComponentResourceManager(typeof(MainForm));
             this.Icon = ((Icon)(resources.GetObject("$this.Icon")));
 
-            this.Paint += this.ImagePreviewForm_Paint;
-            this.KeyDown += this.ImagePreviewForm_KeyDown;
-            this.MouseDown += this.ImagePreviewForm_MouseDown;
-            this.MouseEnter += this.ImagePreviewForm_MouseEnter;
-            this.MouseLeave += this.ImagePreviewForm_MouseLeave;
-            this.MouseMove += this.ImagePreviewForm_MouseMove;
-            this.MouseUp += this.ImagePreviewForm_MouseUp;
-            this.MouseWheel += ImagePreviewForm_MouseWheel;
+            this.Paint += this.MainForm_Paint;
+            this.KeyDown += this.MainForm_KeyDown;
+            this.MouseDown += this.MainForm_MouseDown;
+            this.MouseEnter += this.MainForm_MouseEnter;
+            this.MouseLeave += this.MainForm_MouseLeave;
+            this.MouseMove += this.MainForm_MouseMove;
+            this.MouseUp += this.MainForm_MouseUp;
+            this.MouseWheel += MainForm_MouseWheel;
 
             InitCursor();
 
@@ -137,7 +137,7 @@ namespace uk.andyjohnson.HardView2
 
         #region Navigation
 
-        private void ImagePreviewForm_KeyDown(object sender, KeyEventArgs e)
+        private void MainForm_KeyDown(object sender, KeyEventArgs e)
         {
             switch(e.KeyCode)
             {
@@ -492,7 +492,7 @@ namespace uk.andyjohnson.HardView2
         }
 
 
-        private void ImagePreviewForm_Paint(object sender, PaintEventArgs e)
+        private void MainForm_Paint(object sender, PaintEventArgs e)
         {
             if ((currentFile != null) && currentFile.Exists)
             {
@@ -598,7 +598,7 @@ namespace uk.andyjohnson.HardView2
 
         private Point? startOfDrag = null;
 
-        private void ImagePreviewForm_MouseWheel(object sender, MouseEventArgs e)
+        private void MainForm_MouseWheel(object sender, MouseEventArgs e)
         {
             zoom += (2 * e.Delta);
             if (zoom < 0)
@@ -607,12 +607,12 @@ namespace uk.andyjohnson.HardView2
         }
 
 
-        private void ImagePreviewForm_MouseDown(object sender, MouseEventArgs e)
+        private void MainForm_MouseDown(object sender, MouseEventArgs e)
         {
             startOfDrag = new Point(e.X, e.Y);
         }
 
-        private void ImagePreviewForm_MouseUp(object sender, MouseEventArgs e)
+        private void MainForm_MouseUp(object sender, MouseEventArgs e)
         {
             if (startOfDrag.HasValue)
             {
@@ -623,7 +623,7 @@ namespace uk.andyjohnson.HardView2
             currentDrag = new Size(0, 0);
         }
 
-        private void ImagePreviewForm_MouseMove(object sender, MouseEventArgs e)
+        private void MainForm_MouseMove(object sender, MouseEventArgs e)
         {
             ShowCursor();
 
@@ -635,12 +635,12 @@ namespace uk.andyjohnson.HardView2
             }
         }
 
-        private void ImagePreviewForm_MouseEnter(object sender, EventArgs e)
+        private void MainForm_MouseEnter(object sender, EventArgs e)
         {
             startOfDrag = null;
         }
 
-        private void ImagePreviewForm_MouseLeave(object sender, EventArgs e)
+        private void MainForm_MouseLeave(object sender, EventArgs e)
         {
             if (startOfDrag.HasValue)
             {

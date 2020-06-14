@@ -24,7 +24,7 @@ namespace uk.andyjohnson.HardView2
             }
             if (fileOrDirPath != null)
             {
-                Application.Run(new ImagePreviewForm(fileOrDirPath));
+                Application.Run(new MainForm(fileOrDirPath));
             }
         }
     }
