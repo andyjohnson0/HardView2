@@ -43,6 +43,8 @@ namespace uk.andyjohnson.HardView2
         private FileInfo currentFile;
         private DirectoryInfo currentDirectory;
 
+        private bool cursorHidden;
+        private Timer cursorTimer;
 
 
         private void ImagePreviewForm_Load(object sender, EventArgs e)
@@ -54,8 +56,69 @@ namespace uk.andyjohnson.HardView2
             this.FormBorderStyle = FormBorderStyle.None;
             this.WindowState = FormWindowState.Maximized;
 
+            InitCursor();
+
             DoRedraw();
         }
+
+
+        #region Cursor handling
+
+        private void InitCursor()
+        {
+            cursorHidden = false;
+            cursorTimer = new Timer();
+            cursorTimer.Tick += Timer_Tick;
+            cursorTimer.Interval = 4000;
+            cursorTimer.Start();
+        }
+
+
+        private void RestartCursorTimer()
+        {
+            cursorTimer.Stop();
+            cursorTimer.Start();
+        }
+
+        private void ShowCursor(bool restartTimer = true)
+        {
+            if (cursorHidden)
+            {
+                cursorHidden = false;
+                Cursor.Show();
+            }
+            if (restartTimer)
+                RestartCursorTimer();
+            else
+                cursorTimer.Stop();
+        }
+
+        private void HideCursor()
+        {
+            if (!cursorHidden)
+            {
+                cursorHidden = true;
+                Cursor.Hide();
+            }
+            RestartCursorTimer();
+        }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            HideCursor();
+        }
+
+
+        private void ShowMenu(ContextMenuStrip menu)
+        {
+            if (cursorHidden)
+                Cursor.Position = new Point(this.Width / 2, this.Height / 2);
+            ShowCursor(restartTimer: false);
+            menu.Closed += (o, e) => { RestartCursorTimer(); };
+            menu.Show(this, Cursor.Position);
+        }
+
+        #endregion Cursor handling
 
 
 
@@ -293,7 +356,7 @@ namespace uk.andyjohnson.HardView2
             if (menu.Items.Count > 2)
             {
                 menu.ItemClicked += SubDirMenu_ItemClicked;
-                menu.Show(this, this.Width / 2, this.Height / 2);
+                ShowMenu(menu);
             }
         }
 
@@ -309,7 +372,7 @@ namespace uk.andyjohnson.HardView2
                 menu.Items.Add(drive.Name);
             }
             menu.ItemClicked += SubDirMenu_ItemClicked;
-            menu.Show(this, this.Width / 2, this.Height / 2);
+            ShowMenu(menu);
         }
 
 
@@ -332,9 +395,8 @@ namespace uk.andyjohnson.HardView2
             menu.Items.Add(new ToolStripSeparator());
             menu.Items.Add(IsRegistered() ? "Unregister" : "Register").Tag = 0;
             menu.Items.Add("About").Tag = 1;
-
             menu.ItemClicked += SubApplicationMenu_ItemClicked;
-            menu.Show(this, this.Width / 2, this.Height / 2);
+            ShowMenu(menu);
         }
 
 
@@ -550,6 +612,8 @@ namespace uk.andyjohnson.HardView2
 
         private void ImagePreviewForm_MouseMove(object sender, MouseEventArgs e)
         {
+            ShowCursor();
+
             if (startOfDrag.HasValue)
             {
                 currentDrag.Width = e.X - startOfDrag.Value.X;
