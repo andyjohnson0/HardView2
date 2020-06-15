@@ -329,7 +329,10 @@ namespace uk.andyjohnson.HardView2
                     var dlg = new FolderBrowserDialog();
                     if (currentFile != null)
                         dlg.SelectedPath = currentFile.Directory.FullName;
-                    if (dlg.ShowDialog(this) == DialogResult.OK)
+                    ShowCursor(restartTimer: false);
+                    var result = dlg.ShowDialog(this);
+                    RestartCursorTimer();
+                    if (result == DialogResult.OK)
                     {
                         SetCurrent(dlg.SelectedPath);
                         DoRedraw();
