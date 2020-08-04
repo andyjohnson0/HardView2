@@ -134,7 +134,6 @@ namespace uk.andyjohnson.HardView2
         #endregion Cursor handling
 
 
-
         #region Navigation
 
         private void MainForm_KeyDown(object sender, KeyEventArgs e)
@@ -481,8 +480,6 @@ namespace uk.andyjohnson.HardView2
         #endregion Shell integration
 
 
-
-
         #region Image viewing
 
         private Image currentImage = null;  // Cached image.
@@ -514,7 +511,7 @@ namespace uk.andyjohnson.HardView2
 
                 if (displayInfo)
                 {
-                    ShowInfo(e.Graphics);
+                    ShowInfo(img, e.Graphics);
                 }
             }
             else
@@ -550,33 +547,34 @@ namespace uk.andyjohnson.HardView2
         }
 
 
-        private void ShowInfo(Graphics g)
+        private void ShowInfo(Image img, Graphics g)
         {
-            const long mb = 1024L * 1024L;
+            const long mb = 1024L * 1024L;  // Size of a megabyte
             const float marginX = 20F;
             const float marginY = 20F;
-            const float paddingX = 5F;
-            const float paddingY = 5F;
+            const float paddingX = 10F;
+            const float paddingY = 10F;
+            const float lineSpacingY = 10F;
 
-            var line1 = currentFile.FullName;
-            var line1Size = g.MeasureString(line1, infoFont);
-            var line2 = (currentFile.Length >= mb) ? String.Format("{0:0.0}MB", (float)currentFile.Length / (float)mb) : String.Format("{0:0.0}KB", (float)currentFile.Length / 1024F);
-            var line2Size = g.MeasureString(line2, infoFont);
-            var line3 = string.Format("{0}x{1}", currentImage.Width, currentImage.Height);
-            var line3Size = g.MeasureString(line3, infoFont);
+            var lines = new List<string>();
+            lines.Add(currentFile.FullName);
+            lines.Add((currentFile.Length >= mb) ? String.Format("{0:0.0}MB", (float)currentFile.Length / (float)mb) : String.Format("{0:0.0}KB", (float)currentFile.Length / 1024F));
+            lines.Add(string.Format("{0}x{1}", currentImage.Width, currentImage.Height));
 
-            var width = Math.Max(line1Size.Width, Math.Max(line2Size.Width, line3Size.Width)) + (paddingX * 2F);
-            var height = line1Size.Height + line2Size.Height + line3Size.Height + (paddingY * 2F);
-            g.FillRectangle(Brushes.Black, marginX, marginY, width, height);
+            var (linesSize, maxLineHeight) = g.MeasureStrings(lines.ToArray(), infoFont, lineSpacingY);
+
+            g.FillRectangle(Brushes.Black, marginX, marginY, linesSize.Width + (paddingX * 2F), linesSize.Height + (paddingY * 2F));
 
             var y = marginY + paddingY;
-            g.DrawString(line1, infoFont, Brushes.White, marginX + paddingX, y);
-            y += line1Size.Height;
-            g.DrawString(line2, infoFont, Brushes.White, marginX+ paddingX, y);
-            y += line2Size.Height;
-            g.DrawString(line3, infoFont, Brushes.White, marginX+ paddingX, y);
-            y += line3Size.Height;
+            foreach(var line in lines)
+            {
+                g.DrawString(line, infoFont, Brushes.White, marginX + paddingX, y);
+                y += maxLineHeight + lineSpacingY;
+            }
         }
+
+
+
 
 
         private void ShowToast(

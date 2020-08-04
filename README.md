@@ -53,7 +53,7 @@ keep vs not keep as part of a simple photographic workflow (e.g before adding to
 
 ## Prerequisites
 
-.net framework 4.5 or later.
+.net framework 4.7.2 or later.
 
 Visual Studio 2019 to build.
 
