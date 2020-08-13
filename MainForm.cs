@@ -496,18 +496,22 @@ namespace uk.andyjohnson.HardView2
         {
             if ((currentFile != null) && currentFile.Exists)
             {
-                var img = (currentImage != null) ? currentImage:  Image.FromFile(currentFile.FullName);
-                Point pt;
-                if (scaleToFit)
+                Image img;
+                if (currentImage != null)
                 {
-                    var img2 = ScaleImage(img, this.Size.Width + zoom, this.Size.Height + zoom);
-                    img.Dispose();
-                    img = img2;
+                    img = currentImage;
                 }
-                pt = new Point((this.Width / 2) - (img.Width / 2) + currentPan.Width + currentDrag.Width,
-                               (this.Height / 2) - (img.Height / 2) + currentPan.Height + currentDrag.Height);
-                e.Graphics.DrawImage(img, pt);
-                currentImage = img;
+                else
+                {
+                    img = Image.FromFile(currentFile.FullName);
+                    currentImage = img;
+                }
+                using (var drawImg = scaleToFit ? ScaleImage(img, this.Size.Width + zoom, this.Size.Height + zoom) : img)
+                {
+                    var pt = new Point((this.Width / 2) - (drawImg.Width / 2) + currentPan.Width + currentDrag.Width,
+                                       (this.Height / 2) - (drawImg.Height / 2) + currentPan.Height + currentDrag.Height);
+                    e.Graphics.DrawImage(drawImg, pt);
+                }
 
                 if (displayInfo)
                 {
@@ -547,6 +551,8 @@ namespace uk.andyjohnson.HardView2
         }
 
 
+        #region Information
+
         private void ShowInfo(Image img, Graphics g)
         {
             const long mb = 1024L * 1024L;  // Size of a megabyte
@@ -558,13 +564,41 @@ namespace uk.andyjohnson.HardView2
 
             var lines = new List<string>();
             lines.Add(currentFile.FullName);
-            lines.Add((currentFile.Length >= mb) ? String.Format("{0:0.0}MB", (float)currentFile.Length / (float)mb) : String.Format("{0:0.0}KB", (float)currentFile.Length / 1024F));
-            lines.Add(string.Format("{0}x{1}", currentImage.Width, currentImage.Height));
+            lines.Add((currentFile.Length >= mb) ? String.Format("Size: {0:0.0}MB", (float)currentFile.Length / (float)mb) : String.Format("{0:0.0}KB", (float)currentFile.Length / 1024F));
+            lines.Add(string.Format("Resolution: {0}x{1}", img.Width, img.Height));
+
+            var ts = img.GetDateTimeTaken();
+            if (ts.HasValue)
+                lines.Add("Taken: " + ts.Value.ToString("dd/MM/yyyy HH:mm:ss"));
+
+            var st = img.GetDeviceDescription();
+            if (st != null)
+                lines.Add("Device: " + st);
+
+            var sh = img.GetIsoSpeed();
+            if (sh.HasValue)
+                lines.Add("Speed: ISO" + sh.Value);
+            var db = img.GetShutterSpeed();
+            if (db.HasValue)
+                lines.Add("Shutter: " + ToFractionStr(db.Value) + " sec.");
+            db = img.GetFStop();
+            if (db.HasValue)
+                lines.Add("F-Stop: f/" + db.Value);
+            db = img.GetFocalLength();
+            if (db.HasValue)
+                lines.Add("Focal Length: " + Math.Ceiling(db.Value) + " mm");
+            sh = img.GetMeteringMode();
+            if (sh.HasValue)
+                lines.Add("Metering Mode: " + MeteringModeTostring(sh.Value));
+            sh = img.GetFlashMode();
+            if (sh.HasValue)
+                lines.Add("Flash Mode: " + FlashModeTostring(sh.Value));
+            sh = img.GetWhiteBalance();
+            if (sh.HasValue)
+                lines.Add("White Balance: " + WhiteBalanceToString(sh.Value));
 
             var (linesSize, maxLineHeight) = g.MeasureStrings(lines.ToArray(), infoFont, lineSpacingY);
-
             g.FillRectangle(Brushes.Black, marginX, marginY, linesSize.Width + (paddingX * 2F), linesSize.Height + (paddingY * 2F));
-
             var y = marginY + paddingY;
             foreach(var line in lines)
             {
@@ -574,7 +608,102 @@ namespace uk.andyjohnson.HardView2
         }
 
 
+        // Copied from https://stackoverflow.com/a/41434490
+        private static string ToFractionStr(double x)
+        {
+            if (x < 0)
+            {
+                return "-" + ToFractionStr(-x);
+            }
+            double tolerance = 1.0E-3;
+            double h1 = 1; double h2 = 0;
+            double k1 = 0; double k2 = 1;
+            double b = x;
+            do
+            {
+                double a = Math.Floor(b);
+                double aux = h1; h1 = a * h1 + h2; h2 = aux;
+                aux = k1; k1 = a * k1 + k2; k2 = aux;
+                b = 1 / (b - a);
+            } while (Math.Abs(x - h1 / k1) > x * tolerance);
 
+            return h1 + "/" + k1;
+        }
+
+
+        private static string MeteringModeTostring(ushort mode)
+        {
+            switch(mode)
+            {
+                case 0:
+                    return "Unknown";
+                case 1:
+                    return "Average";
+                case 2:
+                    return "Center Weighted Average";
+                case 3:
+                    return "Spot";
+                case 4:
+                    return "Multi Spot";
+                case 5:
+                    return "Pattern";
+                case 6:
+                    return "Partial";
+                case 255:
+                    return "Other";
+                default:
+                    return "Unknown";
+            }
+        }
+
+
+        private static string FlashModeTostring(ushort mode)
+        {
+            switch (mode)
+            {
+                case 0x0: return "No Flash";
+                case 0x1: return "Fired";
+                case 0x5: return "Fired, Return not detected";
+                case 0x7: return "Fired, Return detected";
+                case 0x8: return "On, Did not fire";
+                case 0x9: return "On, Fired";
+                case 0xd: return "On, Return not detected";
+                case 0xf: return "On, Return detected";
+                case 0x10: return "Off, Did not fire";
+                case 0x14: return "Off, Did not fire, Return not detected";
+                case 0x18: return "Auto, Did not fire";
+                case 0x19: return "Auto, Fired";
+                case 0x1d: return "Auto, Fired, Return not detected";
+                case 0x1f: return "Auto, Fired, Return detected";
+                case 0x20: return "No flash function";
+                case 0x30: return "Off, No flash function";
+                case 0x41: return "Fired, Red - eye reduction";
+                case 0x45: return "Fired, Red - eye reduction, Return not detected";
+                case 0x47: return "Fired, Red - eye reduction, Return detected";
+                case 0x49: return "On, Red - eye reduction";
+                case 0x4d: return "On, Red - eye reduction, Return not detected";
+                case 0x4f: return "On, Red - eye reduction, Return detected";
+                case 0x50: return "Off, Red - eye reduction";
+                case 0x58: return "Auto, Did not fire, Red - eye reduction";
+                case 0x59: return "Auto, Fired, Red - eye reduction";
+                case 0x5d: return "Auto, Fired, Red - eye reduction, Return not detected";
+                case 0x5f: return "Auto, Fired, Red - eye reduction, Return detected";
+                default: return "Unknown";
+            }
+        }
+
+
+        private static string WhiteBalanceToString(ushort mode)
+        {
+            switch(mode)
+            {
+                case 0: return "Auto";
+                case 1: return "Manual";
+                default: return "Unknown";
+            }
+        }
+
+        #endregion Information
 
 
         private void ShowToast(
