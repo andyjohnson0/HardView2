@@ -232,7 +232,7 @@ namespace uk.andyjohnson.HardView2
                         else
                             SetCurrent((FileInfo)null);
                         ResetSizeAndZoom();
-                        DoRedraw("File move to temp folder");
+                        DoRedraw("File moved to temp folder");
                     }
                     break;
                 case Keys.Delete:
