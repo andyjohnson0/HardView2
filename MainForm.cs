@@ -277,6 +277,7 @@ namespace uk.andyjohnson.HardView2
                                 {
                                     DoRedraw();
                                 }
+                                else
                                 {
                                     DoRedraw(currentDirectory.FullName + " - No pictures found");
                                     ShowSubDirMenu();
