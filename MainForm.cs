@@ -275,12 +275,11 @@ namespace uk.andyjohnson.HardView2
                                 SetCurrent(currentDirectory.Parent);
                                 if (GetFiles(currentDirectory).Length > 0)
                                 {
-                                    DoRedraw();
+                                    DoRedraw(currentDirectory.FullName);
                                 }
                                 else
                                 {
                                     DoRedraw(currentDirectory.FullName + " - No pictures found");
-                                    ShowSubDirMenu();
                                 }
                             }
                             else
@@ -398,7 +397,7 @@ namespace uk.andyjohnson.HardView2
             {
                 var newDir = Path.Combine(currentDirectory.FullName, e.ClickedItem.Text);
                 SetCurrent(new DirectoryInfo(newDir));
-                DoRedraw();
+                DoRedraw(currentDirectory.FullName);
             }
         }
 
