@@ -503,7 +503,11 @@ namespace uk.andyjohnson.HardView2
                 }
                 else
                 {
-                    img = Image.FromFile(currentFile.FullName);
+                    using(var stm = new FileStream(currentFile.FullName, FileMode.Open))
+                    {
+                        // Use FromStream() because Fromfile() keeps a lock.
+                        img = Image.FromStream(stm);
+                    }
                     currentImage = img;
                 }
                 using (var drawImg = scaleToFit ? ScaleImage(img, this.Size.Width + zoom, this.Size.Height + zoom) : img)
