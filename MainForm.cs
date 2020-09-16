@@ -506,7 +506,7 @@ namespace uk.andyjohnson.HardView2
                     using(var stm = new FileStream(currentFile.FullName, FileMode.Open))
                     {
                         // Use FromStream() because Fromfile() keeps a lock.
-                        img = Image.FromStream(stm);
+                        img = Image.FromStream(stm, useEmbeddedColorManagement: true, validateImageData: true);
                     }
                     currentImage = img;
                 }
