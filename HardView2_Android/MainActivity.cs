@@ -9,6 +9,7 @@ using Android.Runtime;
 using Android.Views;
 using Android.Graphics;
 using Android.Content.PM;
+using Android.Content;
 using AndroidX.AppCompat.Widget;
 using AndroidX.AppCompat.App;
 using AndroidX.Core.App;
@@ -34,6 +35,9 @@ namespace HardView2
         private int zoom = 0;
         private System.Drawing.Size currentPan = new System.Drawing.Size(0, 0);   // Accumulated position afer drags
         private System.Drawing.Size currentDrag = new System.Drawing.Size(0, 0);  // Position delta during drag
+
+        // Request codes
+        private int changeDirectoryRc = 1;
 
 
 
@@ -106,7 +110,7 @@ namespace HardView2
             }
 
 
-            currentDirectory = new DirectoryInfo(Android.OS.Environment.GetExternalStoragePublicDirectory(Android.OS.Environment.DirectoryDcim /*DirectoryPictures*/).AbsolutePath + "/Camera");
+            currentDirectory = new DirectoryInfo(Android.OS.Environment.GetExternalStoragePublicDirectory(Android.OS.Environment.DirectoryDcim /*DirectoryPictures*/).AbsolutePath /* + "/Camera" */);
             currentFile = currentDirectory.First(imageFileTypes);
 
 
@@ -204,7 +208,9 @@ namespace HardView2
 
         private void OnSwipeDown()
         {
-
+            var intent = new Intent(this, typeof(DirectoryPickerActivity));
+            intent.PutExtra("DirPath", currentDirectory.FullName);
+            StartActivityForResult(intent, changeDirectoryRc);
         }
 
         #endregion Gestures
