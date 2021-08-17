@@ -10,6 +10,7 @@ using Android.Views;
 using Android.Graphics;
 using Android.Content.PM;
 using Android.Content;
+using Android.Widget;
 using AndroidX.AppCompat.Widget;
 using AndroidX.AppCompat.App;
 using AndroidX.Core.App;
@@ -38,6 +39,7 @@ namespace HardView2
 
         // Request codes
         private const int changeDirectoryRc = 1;
+        private const int requestExternalStorage = 2;
 
 
 
@@ -45,9 +47,28 @@ namespace HardView2
         {
             base.OnCreate(savedInstanceState);
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
-            SetContentView(Resource.Layout.activity_main);
 
-            //this.Window.AddFlags(WindowManagerFlags.Fullscreen);
+            DirectoryInfo di;
+            if (savedInstanceState != null)
+            {
+                di = new DirectoryInfo(savedInstanceState.GetString("DirPath"));
+            }
+            else if (this.Intent?.Extras != null)
+            {
+                di = new DirectoryInfo(this.Intent.Extras.GetString("DirPath"));
+            }
+            else
+            {
+                // Initial directory.
+#if RELEASE
+                var dir = Android.OS.Environment.DirectoryPictures;
+#else
+                var dir = Android.OS.Environment.DirectoryDcim;
+#endif
+                di = new DirectoryInfo(Android.OS.Environment.GetExternalStoragePublicDirectory(dir).AbsolutePath);
+            }
+
+            SetContentView(Resource.Layout.activity_main);
             var decorView = this.Window.DecorView;
             var flags = SystemUiFlags.Immersive | SystemUiFlags.LayoutStable | SystemUiFlags.LayoutHideNavigation | SystemUiFlags.LayoutFullscreen |
                         SystemUiFlags.HideNavigation | SystemUiFlags.Fullscreen;
@@ -58,11 +79,12 @@ namespace HardView2
             imageView.SetOnTouchListener(this);
             imageView.DrawEvent += OnDrawImage;
 
+            // 
+            SetCurrentDirectory(di);
             ShowPictures();
         }
 
 
-        private const int requestExternalStorage = 1;
 
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
         {
@@ -88,9 +110,7 @@ namespace HardView2
                 switch (requestCode)
                 {
                     case changeDirectoryRc:
-                        currentDirectory = new DirectoryInfo(data.GetStringExtra("DirPath"));
-                        currentFile = currentDirectory.First(imageFileTypes);
-                        RedrawCurrentImage(true);
+                        SetCurrentDirectory(new DirectoryInfo(data.GetStringExtra("DirPath")));
                         break;
                     default:
                         base.OnActivityResult(requestCode, resultCode, data);
@@ -100,8 +120,37 @@ namespace HardView2
         }
 
 
+        protected override void OnSaveInstanceState(Bundle outState)
+        {
+            outState.PutString("DirPath", currentDirectory.FullName);
+            base.OnSaveInstanceState(outState);
+        }
 
-        #region Drawing
+
+        protected override void OnRestoreInstanceState(Bundle savedState)
+        {
+            base.OnRestoreInstanceState(savedState);
+            currentDirectory = new DirectoryInfo(savedState.GetString("DirPath"));
+        }
+
+
+
+#region Drawing
+
+        private void SetCurrentDirectory(DirectoryInfo di)
+        {
+            currentDirectory = di;
+            currentFile = currentDirectory.First(imageFileTypes);
+            RedrawCurrentImage(true);
+            
+            var fileCount = currentDirectory.GetFiles(imageFileTypes).Length;
+            var prompt = string.Format(Resources.GetString(Resource.String.CurrentDirectoryPrompt),
+                                       currentDirectory.FullName,
+                                       fileCount,
+                                       Resources.GetString(fileCount != 1 ? Resource.String.Images : Resource.String.Image));
+            Toast.MakeText(this, prompt, ToastLength.Long).Show();
+        }
+
 
         private void ShowPictures()
         {
@@ -132,8 +181,8 @@ namespace HardView2
             }
 
             //
-            currentDirectory = new DirectoryInfo(Android.OS.Environment.GetExternalStoragePublicDirectory(Android.OS.Environment.DirectoryDcim /*DirectoryPictures*/).AbsolutePath /* + "/Camera" */);
-            currentFile = currentDirectory.First(imageFileTypes);
+            if (currentFile == null)
+                currentFile = currentDirectory.First(imageFileTypes);
             RedrawCurrentImage(true);
         }
 
@@ -152,14 +201,6 @@ namespace HardView2
 
         private void OnDrawImage(object sender, Canvas canvas)
         {
-            //var paint = new Paint()
-            //{
-            //    Color = Color.White,
-            //    StrokeWidth = 3.0f
-            //};
-            //canvas.DrawLine(0f, 0f, (float)canvas.Width, (float)canvas.Height, paint);
-            //canvas.DrawLine((float)canvas.Width, 0f, 0f, (float)canvas.Height, paint);
-
             if ((currentFile != null) && currentFile.Exists)
             {
                 Bitmap img;
@@ -199,11 +240,11 @@ namespace HardView2
             return Bitmap.CreateScaledBitmap(image, newWidth, newHeight, false);
         }
 
-        #endregion Drawing
+#endregion Drawing
 
 
 
-        #region Gestures
+#region Gestures
 
         private void OnSwipeRight()
         {
@@ -239,9 +280,7 @@ namespace HardView2
             // Move to parent directory.
             if(currentDirectory?.Parent != null)
             {
-                currentDirectory = currentDirectory.Parent;
-                currentFile = currentDirectory.First(imageFileTypes);
-                RedrawCurrentImage(true);
+                SetCurrentDirectory(currentDirectory.Parent);
             }
             else
             {
@@ -249,20 +288,20 @@ namespace HardView2
             }
         }
 
-        #endregion Gestures
+#endregion Gestures
 
 
-        #region IOnTouchListener
+#region IOnTouchListener
 
         public bool OnTouch(View v, MotionEvent e)
         {
             return gestureDetector.OnTouchEvent(e);
         }
 
-        #endregion IOnTouchListener
+#endregion IOnTouchListener
 
 
-        #region IOnGestureListener
+#region IOnGestureListener
 
         public bool OnDown(MotionEvent e)
         {
@@ -323,6 +362,6 @@ namespace HardView2
             return true;
         }
 
-        #endregion IOnGestureListener
+#endregion IOnGestureListener
     }
 }

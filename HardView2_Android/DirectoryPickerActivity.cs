@@ -28,7 +28,7 @@ namespace HardView2
             {
                 currentDirectory = new DirectoryInfo(savedInstanceState.GetString("DirPath"));
             }
-            else if (this.Intent != null)
+            else if (this.Intent?.Extras != null)
             {
                 currentDirectory = new DirectoryInfo(this.Intent.Extras.GetString("DirPath"));
             }
@@ -68,6 +68,5 @@ namespace HardView2
             base.OnRestoreInstanceState(savedState);
             currentDirectory = new DirectoryInfo(savedState.GetString("DirPath"));
         }
-
     }
 }
