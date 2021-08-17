@@ -2,10 +2,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:padding="2dp">
+    <ImageView
+        android:id="@+id/directoryPicker_item_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_menu_archive" />
     <TextView
         android:id="@+id/directoryPicker_item_label"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:textAppearance="?android:attr/textAppearanceMedium"/>
+        android:layout_marginLeft="2dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"/>
 </LinearLayout>

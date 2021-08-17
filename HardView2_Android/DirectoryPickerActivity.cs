@@ -17,7 +17,7 @@ using System.IO;
 
 namespace HardView2
 {
-    [Activity(Label = "DirectoryPickerActivity")]
+    [Activity(Label = "@string/SelectDirectoryPrompt", Theme = "@style/Theme.AppCompat.Light.Dialog.Alert")]
     public class DirectoryPickerActivity : AppCompatActivity
     {
         protected override void OnCreate(Bundle savedInstanceState)
