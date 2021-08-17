@@ -24,6 +24,18 @@ namespace HardView2
         }
 
 
+        public static FileInfo Random(
+            this DirectoryInfo di,
+            string[] fileTypes = null)
+        {
+            var files = di.GetFiles(fileTypes);
+            if (files.Length > 0)
+                return files[new Random().Next(0, files.Length)];
+            else
+                return null;
+        }
+
+
         public static FileInfo[] GetFiles(
             this DirectoryInfo di,
             string[] fileTypes = null)

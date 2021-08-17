@@ -394,11 +394,36 @@ namespace HardView2
                         Toast.MakeText(this, Resource.String.MovedToLastPrompt, ToastLength.Short).Show();
                     }
                     break;
+                case ScreenRegionType.CentreCentre:
+                    currentFile = currentDirectory.Random(imageFileTypes);
+                    if (currentFile != null)
+                    {
+                        RedrawCurrentImage(true);
+                    }
+                    break;
             }
         }
 
         public bool OnSingleTapUp(MotionEvent e)
         {
+            switch(GetScreenRegion(e))
+            {
+                case ScreenRegionType.MiddleLeft:
+                    if (currentFile != null)
+                    {
+                        currentFile = currentFile.Previous(imageFileTypes);
+                        RedrawCurrentImage(true);
+                    }
+                    break;
+                case ScreenRegionType.CentreRight:
+                    if (currentFile != null)
+                    {
+                        currentFile = currentFile.Next(imageFileTypes);
+                        RedrawCurrentImage(true);
+                    }
+                    break;
+            }
+
             return true;
         }
 
