@@ -69,10 +69,7 @@ namespace HardView2
             }
 
             SetContentView(Resource.Layout.activity_main);
-            var decorView = this.Window.DecorView;
-            var flags = SystemUiFlags.Immersive | SystemUiFlags.LayoutStable | SystemUiFlags.LayoutHideNavigation | SystemUiFlags.LayoutFullscreen |
-                        SystemUiFlags.HideNavigation | SystemUiFlags.Fullscreen;
-            decorView.SystemUiVisibility = (StatusBarVisibility)(int)flags;
+            this.EnterFullScreen();
 
             gestureDetector = new GestureDetector(this);
             var imageView = this.FindViewById<ImageView>(Resource.Id.imageView);
@@ -82,6 +79,16 @@ namespace HardView2
             // 
             SetCurrentDirectory(di);
             ShowPictures();
+        }
+
+
+        protected override void OnResume()
+        {
+            base.OnResume();
+
+            var flags = SystemUiFlags.Immersive | SystemUiFlags.LayoutStable | SystemUiFlags.LayoutHideNavigation | SystemUiFlags.LayoutFullscreen |
+            SystemUiFlags.HideNavigation | SystemUiFlags.Fullscreen;
+            this.Window.DecorView.SystemUiVisibility = (StatusBarVisibility)(int)flags;
         }
 
 
@@ -135,7 +142,7 @@ namespace HardView2
 
 
 
-#region Drawing
+        #region Drawing
 
         private void SetCurrentDirectory(DirectoryInfo di)
         {
@@ -285,10 +292,26 @@ namespace HardView2
             }
         }
 
-#endregion Gestures
+        #endregion Gestures
 
 
-#region IOnTouchListener
+        #region IOnMenuItemClickListener
+
+        public bool OnMenuItemClick(IMenuItem item)
+        {
+            switch(item.ItemId)
+            {
+                case Resource.Id.menu_image_moveToTemp:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        #endregion IOnMenuItemClickListener
+
+
+        #region IOnTouchListener
 
         public bool OnTouch(View v, MotionEvent e)
         {
@@ -442,6 +465,7 @@ namespace HardView2
         public void OnShowPress(MotionEvent e)
         {
         }
-#endregion IOnGestureListener
+
+        #endregion IOnGestureListener
     }
 }

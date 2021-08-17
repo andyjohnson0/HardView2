@@ -34,6 +34,7 @@ namespace HardView2
             }
 
             SetContentView(Resource.Layout.activity_directoryPicker);
+            this.EnterFullScreen();
 
             dirRecView = FindViewById<RecyclerView>(Resource.Id.dirRecView);
             layoutMgr = new LinearLayoutManager(this);
