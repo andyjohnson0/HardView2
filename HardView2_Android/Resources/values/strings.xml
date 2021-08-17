@@ -7,6 +7,8 @@
 	
     <string name="SelectDirectoryPrompt">Select Directory</string>
     <string name="CurrentDirectoryPrompt">Showing directory {0} containing {1} {2}</string>
+    <string name="MovedToFirstPrompt">Showing first image</string>
+    <string name="MovedToLastPrompt">Showing last image</string>
 	
     <string name="ExternalStoragePermissionPrompt">Read External Storage</string>
     <string name="ExternalStoragePermissionMsg">This app needs to be able to read external storage to display photos that are stored there</string>

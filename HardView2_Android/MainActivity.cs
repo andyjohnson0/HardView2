@@ -266,13 +266,10 @@ namespace HardView2
 
         private void OnSwipeUp()
         {
-            if (currentDirectory != null)
-            {
-                // Show child directory choices
-                var intent = new Intent(this, typeof(DirectoryPickerActivity));
-                intent.PutExtra("DirPath", currentDirectory.FullName);
-                StartActivityForResult(intent, changeDirectoryRc);
-            }
+            // Show child directory choices
+            var intent = new Intent(this, typeof(DirectoryPickerActivity));
+            intent.PutExtra("DirPath", currentDirectory.FullName);
+            StartActivityForResult(intent, changeDirectoryRc);
         }
 
         private void OnSwipeDown()
@@ -302,11 +299,6 @@ namespace HardView2
 
 
 #region IOnGestureListener
-
-        public bool OnDown(MotionEvent e)
-        {
-            return true;
-        }
 
         public bool OnFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY)
         {
@@ -344,8 +336,77 @@ namespace HardView2
             return result;
         }
 
+
+        private enum ScreenRegionType
+        {
+            TopLeft = 1,
+            TopCentre,
+            TopRight,
+            MiddleLeft,
+            CentreCentre,
+            CentreRight,
+            BottomLeft,
+            BottomCentre,
+            BottomRight,
+        }
+
+        private ScreenRegionType GetScreenRegion(MotionEvent e)
+        {
+            var w = (float)this.Window.DecorView.Width;
+            var h = (float)this.Window.DecorView.Height;
+
+            int t;
+            if (e.GetX() < w * 0.25f)
+                t = (int)ScreenRegionType.TopLeft;
+            else if (e.GetX() > w * 0.75f)
+                t = (int)ScreenRegionType.TopRight;
+            else
+                t = (int)ScreenRegionType.TopCentre;
+            if (e.GetY() < h * 0.25f)
+                t += 0;
+            else if (e.GetY() > h * 0.75f)
+                t += 6;
+            else
+                t += 3;
+
+            return (ScreenRegionType)t;
+        }
+
+
+
         public void OnLongPress(MotionEvent e)
         {
+            switch(GetScreenRegion(e))
+            {
+                case ScreenRegionType.MiddleLeft:
+                    currentFile = currentDirectory.First(imageFileTypes);
+                    if (currentFile != null)
+                    {
+                        RedrawCurrentImage(true);
+                        Toast.MakeText(this, Resource.String.MovedToFirstPrompt, ToastLength.Short).Show();
+                    }
+                    break;
+                case ScreenRegionType.CentreRight:
+                    currentFile = currentDirectory.Last(imageFileTypes);
+                    if (currentFile != null)
+                    {
+                        RedrawCurrentImage(true);
+                        Toast.MakeText(this, Resource.String.MovedToLastPrompt, ToastLength.Short).Show();
+                    }
+                    break;
+            }
+        }
+
+        public bool OnSingleTapUp(MotionEvent e)
+        {
+            return true;
+        }
+
+
+
+        public bool OnDown(MotionEvent e)
+        {
+            return true;
         }
 
         public bool OnScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY)
@@ -356,12 +417,6 @@ namespace HardView2
         public void OnShowPress(MotionEvent e)
         {
         }
-
-        public bool OnSingleTapUp(MotionEvent e)
-        {
-            return true;
-        }
-
 #endregion IOnGestureListener
     }
 }
