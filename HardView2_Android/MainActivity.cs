@@ -37,7 +37,7 @@ namespace HardView2
         private System.Drawing.Size currentDrag = new System.Drawing.Size(0, 0);  // Position delta during drag
 
         // Request codes
-        private int changeDirectoryRc = 1;
+        private const int changeDirectoryRc = 1;
 
 
 
@@ -81,6 +81,28 @@ namespace HardView2
         }
 
 
+        protected override void OnActivityResult(int requestCode, [GeneratedEnum] Result resultCode, Intent data)
+        {
+            if (resultCode == Result.Ok)
+            {
+                switch (requestCode)
+                {
+                    case changeDirectoryRc:
+                        currentDirectory = new DirectoryInfo(data.GetStringExtra("DirPath"));
+                        currentFile = currentDirectory.First(imageFileTypes);
+                        RedrawCurrentImage(true);
+                        break;
+                    default:
+                        base.OnActivityResult(requestCode, resultCode, data);
+                        break;
+                }
+            }
+        }
+
+
+
+        #region Drawing
+
         private void ShowPictures()
         {
             // Check permissions.
@@ -109,11 +131,9 @@ namespace HardView2
                 }
             }
 
-
+            //
             currentDirectory = new DirectoryInfo(Android.OS.Environment.GetExternalStoragePublicDirectory(Android.OS.Environment.DirectoryDcim /*DirectoryPictures*/).AbsolutePath /* + "/Camera" */);
             currentFile = currentDirectory.First(imageFileTypes);
-
-
             RedrawCurrentImage(true);
         }
 
@@ -179,6 +199,8 @@ namespace HardView2
             return Bitmap.CreateScaledBitmap(image, newWidth, newHeight, false);
         }
 
+        #endregion Drawing
+
 
 
         #region Gestures
@@ -203,14 +225,28 @@ namespace HardView2
 
         private void OnSwipeUp()
         {
-
+            if (currentDirectory != null)
+            {
+                // Show child directory choices
+                var intent = new Intent(this, typeof(DirectoryPickerActivity));
+                intent.PutExtra("DirPath", currentDirectory.FullName);
+                StartActivityForResult(intent, changeDirectoryRc);
+            }
         }
 
         private void OnSwipeDown()
         {
-            var intent = new Intent(this, typeof(DirectoryPickerActivity));
-            intent.PutExtra("DirPath", currentDirectory.FullName);
-            StartActivityForResult(intent, changeDirectoryRc);
+            // Move to parent directory.
+            if(currentDirectory?.Parent != null)
+            {
+                currentDirectory = currentDirectory.Parent;
+                currentFile = currentDirectory.First(imageFileTypes);
+                RedrawCurrentImage(true);
+            }
+            else
+            {
+                // TODO
+            }
         }
 
         #endregion Gestures

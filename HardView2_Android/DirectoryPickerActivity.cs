@@ -33,12 +33,13 @@ namespace HardView2
                 currentDirectory = new DirectoryInfo(this.Intent.Extras.GetString("DirPath"));
             }
 
-            SetContentView(Resource.Layout.activity_DirectoryPicker);
+            SetContentView(Resource.Layout.activity_directoryPicker);
 
             dirRecView = FindViewById<RecyclerView>(Resource.Id.dirRecView);
             layoutMgr = new LinearLayoutManager(this);
             dirRecView.SetLayoutManager(layoutMgr);
-            adapter = new DirectoryInfoAdapter(this, currentDirectory);
+            var adapter = new DirectoryInfoAdapter(this, currentDirectory);
+            adapter.ItemClick += OnItemClick;
             dirRecView.SetAdapter(adapter);
         }
 
@@ -46,7 +47,13 @@ namespace HardView2
         private DirectoryInfo currentDirectory;
         private RecyclerView dirRecView;
         private RecyclerView.LayoutManager layoutMgr;
-        private RecyclerView.Adapter adapter;
+
+
+        private void OnItemClick(object sender, DirectoryInfo di)
+        {
+            SetResult(Result.Ok, new Intent().PutExtra("DirPath", di.FullName));
+            Finish();
+        }
 
 
         protected override void OnSaveInstanceState(Bundle outState)
