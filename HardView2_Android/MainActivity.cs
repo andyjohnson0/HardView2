@@ -69,7 +69,7 @@ namespace HardView2
             }
 
             SetContentView(Resource.Layout.activity_main);
-            this.EnterFullScreen();
+            this.EnterImmersiveMode();
 
             gestureDetector = new GestureDetector(this);
             var imageView = this.FindViewById<ImageView>(Resource.Id.imageView);
@@ -293,22 +293,6 @@ namespace HardView2
         }
 
         #endregion Gestures
-
-
-        #region IOnMenuItemClickListener
-
-        public bool OnMenuItemClick(IMenuItem item)
-        {
-            switch(item.ItemId)
-            {
-                case Resource.Id.menu_image_moveToTemp:
-                    return true;
-                default:
-                    return false;
-            }
-        }
-
-        #endregion IOnMenuItemClickListener
 
 
         #region IOnTouchListener

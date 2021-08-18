@@ -14,10 +14,11 @@ namespace HardView2
 {
     public static class ActivityExt
     {
-        public static void EnterFullScreen(this AndroidX.AppCompat.App.AppCompatActivity activity)
+        public static void EnterImmersiveMode(this AndroidX.AppCompat.App.AppCompatActivity activity)
         {
-            var flags = SystemUiFlags.Immersive | SystemUiFlags.LayoutStable | SystemUiFlags.LayoutHideNavigation | SystemUiFlags.LayoutFullscreen |
-            SystemUiFlags.HideNavigation | SystemUiFlags.Fullscreen;
+            // See https://developer.android.com/training/system-ui/immersive
+            var flags = SystemUiFlags.Immersive | SystemUiFlags.Fullscreen | SystemUiFlags.HideNavigation |
+                        SystemUiFlags.LayoutHideNavigation | SystemUiFlags.LayoutStable | SystemUiFlags.LayoutFullscreen;
             activity.Window.DecorView.SystemUiVisibility = (StatusBarVisibility)(int)flags;
         }
     }
