@@ -8,7 +8,7 @@
         android:id="@+id/directoryPicker_item_icon"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:src="@drawable/ic_menu_archive" />
+        android:src="@drawable/ic_action_folder" />
     <TextView
         android:id="@+id/directoryPicker_item_label"
         android:layout_width="wrap_content"

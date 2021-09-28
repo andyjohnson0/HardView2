@@ -146,16 +146,31 @@ namespace HardView2
 
         private void SetCurrentDirectory(DirectoryInfo di)
         {
-            currentDirectory = di;
-            currentFile = currentDirectory.First(imageFileTypes);
-            RedrawCurrentImage(true);
-            
-            var fileCount = currentDirectory.GetFiles(imageFileTypes).Length;
-            var prompt = string.Format(Resources.GetString(Resource.String.CurrentDirectoryPrompt),
-                                       currentDirectory.FullName,
-                                       fileCount,
-                                       Resources.GetString(fileCount != 1 ? Resource.String.Images : Resource.String.Image));
-            Toast.MakeText(this, prompt, ToastLength.Long).Show();
+            var cd = currentDirectory;
+            var cf = currentFile;
+
+            try
+            {
+                currentDirectory = di;
+                currentFile = currentDirectory.First(imageFileTypes);
+                RedrawCurrentImage(true);
+
+                var fileCount = currentDirectory.GetFiles(imageFileTypes).Length;
+                var prompt = string.Format(Resources.GetString(Resource.String.CurrentDirectoryPrompt),
+                                           currentDirectory.FullName,
+                                           fileCount,
+                                           Resources.GetString(fileCount != 1 ? Resource.String.Images : Resource.String.Image));
+                Toast.MakeText(this, prompt, ToastLength.Long).Show();
+            }
+            catch(Exception)
+            {
+                var prompt = string.Format(Resources.GetString(Resource.String.DirectoryInaccessiblePrompt),
+                                                           currentDirectory.FullName);
+                Toast.MakeText(this, prompt, ToastLength.Long).Show();
+
+                currentDirectory = cd;
+                currentFile = cf;
+            }
         }
 
 
@@ -284,7 +299,14 @@ namespace HardView2
             // Move to parent directory.
             if(currentDirectory?.Parent != null)
             {
-                SetCurrentDirectory(currentDirectory.Parent);
+                try
+                {
+                    SetCurrentDirectory(currentDirectory.Parent);
+                }
+                catch(Exception)
+                {
+                    // TODO: Failed to cahange directory
+                }
             }
             else
             {
