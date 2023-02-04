@@ -1,17 +1,18 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29025.244
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7BE58D33-F0B6-430E-9659-C2B6FD00E21B}"
 	ProjectSection(SolutionItems) = preProject
-		LICENSE = LICENSE
+		CHANGELOG.md = CHANGELOG.md
 		README.md = README.md
+		LICENSE.md = LICENSE.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HardView2_Windows", "HardView2_Windows\HardView2_Windows.csproj", "{484178C4-3601-4940-B7A2-6C00DFFE9461}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HardView2.Android", "HardView2.Android\HardView2.Android.csproj", "{43B60309-8ADA-434D-92D2-26E51E83362C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HardView2_Android", "HardView2_Android\HardView2_Android.csproj", "{43B60309-8ADA-434D-92D2-26E51E83362C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HardView2.Windows", "HardView2.Windows\HardView2.Windows.csproj", "{484178C4-3601-4940-B7A2-6C00DFFE9461}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,16 +20,16 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{484178C4-3601-4940-B7A2-6C00DFFE9461}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{484178C4-3601-4940-B7A2-6C00DFFE9461}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{484178C4-3601-4940-B7A2-6C00DFFE9461}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{484178C4-3601-4940-B7A2-6C00DFFE9461}.Release|Any CPU.Build.0 = Release|Any CPU
 		{43B60309-8ADA-434D-92D2-26E51E83362C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{43B60309-8ADA-434D-92D2-26E51E83362C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{43B60309-8ADA-434D-92D2-26E51E83362C}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
 		{43B60309-8ADA-434D-92D2-26E51E83362C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{43B60309-8ADA-434D-92D2-26E51E83362C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{43B60309-8ADA-434D-92D2-26E51E83362C}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{484178C4-3601-4940-B7A2-6C00DFFE9461}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{484178C4-3601-4940-B7A2-6C00DFFE9461}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{484178C4-3601-4940-B7A2-6C00DFFE9461}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{484178C4-3601-4940-B7A2-6C00DFFE9461}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
