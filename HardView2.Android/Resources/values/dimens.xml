@@ -1,0 +1,10 @@
+<resources>
+    <dimen name="largeMargin">10dp</dimen>
+    <dimen name="smallMargin">2dp</dimen>
+    <dimen name="xSmallMargin">1dp</dimen>
+	
+    <dimen name="buttonPadding">10dp</dimen>
+
+	<dimen name="largeText">24sp</dimen>
+	<dimen name="smallText">12sp</dimen>
+</resources>

@@ -1,0 +1,27 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+		<item name="android:background">@color/darkBackground</item>
+		<item name="android:textColor">@color/lightForeground</item>
+		
+        <item name="colorPrimary">@color/darkBackground</item>
+        <item name="colorPrimaryDark">@color/darkBackground</item>
+        <item name="colorAccent">@color/accent</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+	<!-- Style for dialog with dark background and light text. textColor sets the title text colour, 
+	     textAccentPrimary is the body text colour, and colorAccent is the button background colour. -->
+	<style name="AppDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+		<item name="android:background">@drawable/dialogRectShape</item>
+		<item name="android:textColor">@color/lightForeground</item>
+		<item name="android:textColorPrimary">@color/lightForeground</item>
+		<item name="android:colorAccent">@color/accent</item>
+	</style>
+
+</resources>
