@@ -14,8 +14,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HardView2.Android", "HardVi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HardView2.Windows", "HardView2.Windows\HardView2.Windows.csproj", "{484178C4-3601-4940-B7A2-6C00DFFE9461}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HardView2_Android", "HardView2_Android\HardView2_Android.csproj", "{43B60309-8ADA-434D-92D2-26E51E83362C}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,12 +30,6 @@ Global
 		{484178C4-3601-4940-B7A2-6C00DFFE9461}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{484178C4-3601-4940-B7A2-6C00DFFE9461}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{484178C4-3601-4940-B7A2-6C00DFFE9461}.Release|Any CPU.Build.0 = Release|Any CPU
-		{43B60309-8ADA-434D-92D2-26E51E83362C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{43B60309-8ADA-434D-92D2-26E51E83362C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{43B60309-8ADA-434D-92D2-26E51E83362C}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{43B60309-8ADA-434D-92D2-26E51E83362C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{43B60309-8ADA-434D-92D2-26E51E83362C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{43B60309-8ADA-434D-92D2-26E51E83362C}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
